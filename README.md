@@ -1,7 +1,7 @@
 # Bus Booking & Ticketing System — Odoo 19
 
 A custom Odoo 19 module for intercity bus ticket booking, modeled on real-world
-operators like Faisal Movers. Covers route/vehicle master data, trip scheduling,
+operators like Faisal Movers. Covers route/vehicle master data, trip scheduling ,
 seat-level booking with double-booking prevention, invoicing, and reporting.
 
 Built as a professional, deployable project — not a demo module.

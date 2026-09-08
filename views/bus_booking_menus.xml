@@ -1,0 +1,60 @@
+<odoo>
+    <data>
+        <!-- Main Menu -->
+        <menuitem name="Bus Booking" id="menu_bus_booking"
+                  action="bus_booking_action"
+                  web_icon="bus_booking,static/description/icon.png"
+                  sequence="-1"/>
+
+        <!-- Trips (sibling to Configuration) -->
+        <menuitem name="Trips"
+                  id="menu_bus_trips"
+                  parent="menu_bus_booking"
+                  action="bus_trip_action"/>
+
+        <!-- Bookings (sibling to Trips and Configuration) -->
+        <menuitem name="Bookings"
+                  id="menu_bus_bookings"
+                  parent="menu_bus_booking"
+                  action="bus_booking_action"/>
+
+        <!-- Reports Menu -->
+        <menuitem name="Reports"
+                  id="menu_bus_reports"
+                  parent="menu_bus_booking"
+                  sequence="30"/>
+        <menuitem name="Revenue Report"
+                  id="menu_bus_revenue_report"
+                  parent="menu_bus_reports"
+                  action="action_revenue_report"/>
+        <menuitem name="Occupancy Report"
+                  id="menu_bus_occupancy_report"
+                  parent="menu_bus_reports"
+                  action="action_occupancy_report"/>
+        <menuitem name="Today's Bookings"
+                  id="menu_bus_today_bookings"
+                  parent="menu_bus_reports"
+                  action="action_today_bookings"/>
+
+        <!-- Configuration Menu -->
+        <menuitem name="Configuration" id="menu_bus_config" parent="menu_bus_booking"/>
+
+        <!-- Routes -->
+        <menuitem name="Routes"
+                  id="menu_bus_routes"
+                  parent="menu_bus_config"
+                  action="bus_route_action"/>
+
+        <!-- Vehicles -->
+        <menuitem name="Vehicles"
+                  id="menu_bus_vehicles"
+                  parent="menu_bus_config"
+                  action="bus_vehicle_action"/>
+
+        <!-- Drivers -->
+        <menuitem name="Drivers"
+                  id="menu_bus_drivers"
+                  parent="menu_bus_config"
+                  action="bus_driver_action"/>
+    </data>
+</odoo>

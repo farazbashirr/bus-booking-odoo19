@@ -1,0 +1,31 @@
+<odoo>
+    <data noupdate="1">
+        <!-- Module Category -->
+        <record id="module_category_bus_booking" model="ir.module.category">
+            <field name="name">Bus Booking</field>
+            <field name="sequence">100</field>
+        </record>
+
+        <!-- Privilege (replaces old category_id on res.groups) -->
+        <record id="privilege_bus_booking" model="res.groups.privilege">
+            <field name="name">Bus Booking</field>
+            <field name="category_id" ref="module_category_bus_booking"/>
+            <field name="sequence">100</field>
+        </record>
+
+        <!-- Booking Agent Group -->
+        <record id="group_bus_booking_agent" model="res.groups">
+            <field name="name">Booking Agent</field>
+            <field name="privilege_id" ref="privilege_bus_booking"/>
+            <field name="sequence">1</field>
+        </record>
+
+        <!-- Terminal Manager Group (inherits Agent) -->
+        <record id="group_bus_booking_manager" model="res.groups">
+            <field name="name">Terminal Manager</field>
+            <field name="privilege_id" ref="privilege_bus_booking"/>
+            <field name="implied_ids" eval="[(4, ref('group_bus_booking_agent'))]"/>
+            <field name="sequence">2</field>
+        </record>
+    </data>
+</odoo>

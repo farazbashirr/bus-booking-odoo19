@@ -1,0 +1,93 @@
+<odoo>
+    <data>
+        <!-- Report Action -->
+        <record id="action_report_bus_ticket" model="ir.actions.report">
+            <field name="name">Bus Ticket</field>
+            <field name="model">bus.booking</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">bus_booking.report_bus_ticket</field>
+            <field name="report_file">bus_booking.report_bus_ticket</field>
+            <field name="binding_model_id" ref="model_bus_booking"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <!-- QWeb Template -->
+        <template id="report_bus_ticket">
+            <t t-call="web.external_layout">
+                <t t-set="doc_data" t-value="doc_ids"/>
+                <t t-call="web.html_container">
+                    <t t-foreach="docs" t-as="doc">
+                        <div class="page">
+                            <h2 style="text-align: center; margin-bottom: 20px;">Bus Ticket</h2>
+
+                            <div class="row mt16 mb32">
+                                <div class="col-6">
+                                    <strong>Booking Reference:</strong>
+                                    <p t-field="doc.name"/>
+                                </div>
+                                <div class="col-6">
+                                    <strong>Booking Date:</strong>
+                                    <p t-field="doc.booking_date"/>
+                                </div>
+                            </div>
+
+                            <div class="row mb32">
+                                <div class="col-6">
+                                    <strong>Customer:</strong>
+                                    <p t-field="doc.customer_id"/>
+                                </div>
+                                <div class="col-6">
+                                    <strong>Payment Status:</strong>
+                                    <p t-field="doc.payment_status"/>
+                                </div>
+                            </div>
+
+                            <h3 class="mb16">Trip Details</h3>
+                            <div class="row mb16">
+                                <div class="col-6">
+                                    <strong>Route:</strong>
+                                    <p>
+                                        <span t-field="doc.trip_id.route_id.origin"/>
+                                        →
+                                        <span t-field="doc.trip_id.route_id.destination"/>
+                                    </p>
+                                </div>
+                                <div class="col-6">
+                                    <strong>Departure:</strong>
+                                    <p t-field="doc.trip_id.departure_datetime"/>
+                                </div>
+                            </div>
+
+                            <h3 class="mb16">Seats</h3>
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Seat Number</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="doc.booking_seat_ids" t-as="seat">
+                                        <tr>
+                                            <td><span t-field="seat.seat_number"/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+
+                            <div class="row mt32">
+                                <div class="col-6">
+                                    <strong>Fare per Seat:</strong>
+                                    <p t-field="doc.fare_per_seat"/>
+                                </div>
+                                <div class="col-6">
+                                    <strong>Total Fare:</strong>
+                                    <p t-field="doc.total_fare" class="fw-bold"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

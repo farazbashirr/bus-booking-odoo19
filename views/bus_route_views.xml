@@ -1,0 +1,46 @@
+<odoo>
+    <data>
+        <!-- List View for bus.route -->
+        <record id="bus_route_list" model="ir.ui.view">
+            <field name="name">bus.route.list</field>
+            <field name="model">bus.route</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="origin"/>
+                    <field name="destination"/>
+                    <field name="distance_km"/>
+                    <field name="base_fare"/>
+                    <field name="active"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Form View for bus.route -->
+        <record id="bus_route_form" model="ir.ui.view">
+            <field name="name">bus.route.form</field>
+            <field name="model">bus.route</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="origin"/>
+                            <field name="destination"/>
+                            <field name="distance_km"/>
+                            <field name="base_fare"/>
+                            <field name="active"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="bus_route_action" model="ir.actions.act_window">
+            <field name="name">Routes</field>
+            <field name="res_model">bus.route</field>
+            <field name="view_mode">list,form</field>
+        </record>
+    </data>
+</odoo>

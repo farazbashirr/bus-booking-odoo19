@@ -1,0 +1,16 @@
+<odoo>
+    <data>
+        <!-- List View for bus.trip.seat -->
+        <record id="bus_trip_seat_list" model="ir.ui.view">
+            <field name="name">bus.trip.seat.list</field>
+            <field name="model">bus.trip.seat</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="trip_id"/>
+                    <field name="seat_number"/>
+                    <field name="state"/>
+                </list>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,15 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bus_route_agent,bus.route.agent,model_bus_route,group_bus_booking_agent,1,0,0,0
+access_bus_route_manager,bus.route.manager,model_bus_route,group_bus_booking_manager,1,1,1,1
+access_bus_vehicle_agent,bus.vehicle.agent,model_bus_vehicle,group_bus_booking_agent,1,0,0,0
+access_bus_vehicle_manager,bus.vehicle.manager,model_bus_vehicle,group_bus_booking_manager,1,1,1,1
+access_bus_seat_agent,bus.seat.agent,model_bus_seat,group_bus_booking_agent,1,0,0,0
+access_bus_seat_manager,bus.seat.manager,model_bus_seat,group_bus_booking_manager,1,1,1,1
+access_bus_driver_agent,bus.driver.agent,model_bus_driver,group_bus_booking_agent,1,0,0,0
+access_bus_driver_manager,bus.driver.manager,model_bus_driver,group_bus_booking_manager,1,1,1,1
+access_bus_trip_agent,bus.trip.agent,model_bus_trip,group_bus_booking_agent,1,0,0,0
+access_bus_trip_manager,bus.trip.manager,model_bus_trip,group_bus_booking_manager,1,1,1,1
+access_bus_trip_seat_agent,bus.trip.seat.agent,model_bus_trip_seat,group_bus_booking_agent,1,0,0,0
+access_bus_trip_seat_manager,bus.trip.seat.manager,model_bus_trip_seat,group_bus_booking_manager,1,1,1,1
+access_bus_booking_agent,bus.booking.agent,model_bus_booking,group_bus_booking_agent,1,1,1,0
+access_bus_booking_manager,bus.booking.manager,model_bus_booking,group_bus_booking_manager,1,1,1,1

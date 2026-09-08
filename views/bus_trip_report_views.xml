@@ -1,0 +1,22 @@
+<odoo>
+    <data>
+        <!-- Occupancy Graph View -->
+        <record id="view_occupancy_graph" model="ir.ui.view">
+            <field name="name">bus.trip.graph</field>
+            <field name="model">bus.trip</field>
+            <field name="arch" type="xml">
+                <graph string="Occupancy by Route" type="bar">
+                    <field name="route_id" type="row"/>
+                    <field name="occupancy_rate" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <!-- Occupancy Report Action -->
+        <record id="action_occupancy_report" model="ir.actions.act_window">
+            <field name="name">Occupancy Report</field>
+            <field name="res_model">bus.trip</field>
+            <field name="view_mode">graph,pivot,list</field>
+        </record>
+    </data>
+</odoo>
