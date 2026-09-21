@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- ============================================================ -->
+        <!-- HOMEPAGE                                                      -->
+        <!-- Seeds professional content into the website homepage. The    -->
+        <!-- selected homepage's #wrap container is replaced once at      -->
+        <!-- install; future Website Builder edits are preserved through  -->
+        <!-- noupdate="1".                                                -->
+        <!-- ============================================================ -->
+        <template id="website_bus_booking_homepage" inherit_id="website.homepage" name="Bus Booking Homepage Content" priority="10">
+            <xpath expr="//*[@id='wrap']" position="replace">
+                <div id="wrap" class="oe_structure oe_empty">
+
+                    <!-- Hero -->
+                    <section class="py-5 bg-primary">
+                        <div class="container py-5 text-center text-white">
+                            <img src="/bus_booking/static/description/icon.png" alt="Faisal Movers" class="img-fluid rounded-circle mb-4" style="width: 110px; height: 110px; object-fit: cover; box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.25);"/>
+                            <h1 class="fw-bold mb-3">Book Your Bus Tickets Online — Fast, Easy, Reliable</h1>
+                            <p class="lead mb-4">
+                                Faisal Movers connects major cities across Pakistan with safe,
+                                comfortable and affordable intercity travel. Book your seat in seconds.
+                            </p>
+                            <a href="/bus/trips" class="btn btn-light btn-lg px-4">Book a Trip</a>
+                        </div>
+                    </section>
+
+                    <!-- Why Choose Us -->
+                    <section class="py-5">
+                        <div class="container">
+                            <h2 class="text-center mb-5">Why Choose Faisal Movers</h2>
+                            <div class="row">
+                                <div class="col-lg-4 mb-4 text-center">
+                                    <i class="fa fa-clock-o text-primary mb-3" style="font-size: 2.5rem;"/>
+                                    <h5 class="fw-bold">On-Time Departures</h5>
+                                    <p class="mb-0">
+                                        Our network runs on a strict schedule so you can plan your
+                                        journey with confidence.
+                                    </p>
+                                </div>
+                                <div class="col-lg-4 mb-4 text-center">
+                                    <i class="fa fa-bus text-primary mb-3" style="font-size: 2.5rem;"/>
+                                    <h5 class="fw-bold">Comfortable Coaches</h5>
+                                    <p class="mb-0">
+                                        Modern AC and Non-AC coaches with generous legroom to keep
+                                        you relaxed on every route.
+                                    </p>
+                                </div>
+                                <div class="col-lg-4 mb-4 text-center">
+                                    <i class="fa fa-laptop text-primary mb-3" style="font-size: 2.5rem;"/>
+                                    <h5 class="fw-bold">Easy Online Booking</h5>
+                                    <p class="mb-0">
+                                        Pick your route, choose your seat and pay securely — all
+                                        from your phone or computer.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Popular Routes -->
+                    <section class="py-5 bg-light">
+                        <div class="container">
+                            <h2 class="text-center mb-5">Popular Routes</h2>
+                            <div class="row">
+                                <div class="col-lg-3 col-md-6 mb-4">
+                                    <div class="card h-100 text-center">
+                                        <div class="card-body">
+                                            <h5 class="fw-bold mb-1">Lahore — Karachi</h5>
+                                            <p class="text-muted mb-3">Daily departures on AC and Non-AC coaches</p>
+                                            <a href="/bus/trips" class="btn btn-sm btn-outline-primary">View Trips</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6 mb-4">
+                                    <div class="card h-100 text-center">
+                                        <div class="card-body">
+                                            <h5 class="fw-bold mb-1">Lahore — Islamabad</h5>
+                                            <p class="text-muted mb-3">Frequent departures throughout the day</p>
+                                            <a href="/bus/trips" class="btn btn-sm btn-outline-primary">View Trips</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6 mb-4">
+                                    <div class="card h-100 text-center">
+                                        <div class="card-body">
+                                            <h5 class="fw-bold mb-1">Faisalabad — Multan</h5>
+                                            <p class="text-muted mb-3">Comfortable evening and overnight runs</p>
+                                            <a href="/bus/trips" class="btn btn-sm btn-outline-primary">View Trips</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6 mb-4">
+                                    <div class="card h-100 text-center">
+                                        <div class="card-body">
+                                            <h5 class="fw-bold mb-1">Peshawar — Quetta</h5>
+                                            <p class="text-muted mb-3">Long-haul routes with rest stops</p>
+                                            <a href="/bus/trips" class="btn btn-sm btn-outline-primary">View Trips</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Closing CTA -->
+                    <section class="py-5 bg-dark">
+                        <div class="container py-4 text-center text-white">
+                            <h2 class="fw-bold mb-3">Ready to Travel?</h2>
+                            <p class="lead mb-4">
+                                Choose your route, pick your seat and book your ticket today.
+                            </p>
+                            <a href="/bus/trips" class="btn btn-primary btn-lg px-4">Book a Trip</a>
+                        </div>
+                    </section>
+
+                </div>
+            </xpath>
+        </template>
+
+        <!-- ============================================================ -->
+        <!-- ABOUT US                                                      -->
+        <!-- New website page at /about-us + navbar menu.                 -->
+        <!-- ============================================================ -->
+        <template id="about_us" name="About Us">
+            <t t-call="website.layout">
+                <div id="wrap" class="oe_structure oe_empty">
+                    <section class="py-5 bg-primary">
+                        <div class="container py-4 text-center text-white">
+                            <h1 class="fw-bold mb-3">About Faisal Movers</h1>
+                            <p class="lead mb-0">
+                                Safe, reliable and affordable intercity bus travel across Pakistan.
+                            </p>
+                        </div>
+                    </section>
+                    <section class="py-5">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-8 mx-auto">
+                                    <h2 class="fw-bold mb-3">Who We Are</h2>
+                                    <p>
+                                        Faisal Movers has been moving people and families between the
+                                        cities of Pakistan with comfort and care. From short regional
+                                        hops to long overnight journeys, we operate a modern fleet of
+                                        AC and Non-AC coaches on a strict schedule, so you always know
+                                        when your bus departs and when it arrives.
+                                    </p>
+                                    <h3 class="fw-bold mt-5 mb-3">Our Mission</h3>
+                                    <p>
+                                        Our mission is simple: make intercity travel safe, reliable and
+                                        affordable for everyone. Every seat we sell comes with the same
+                                        promise — a clean coach, a courteous crew and an on-time journey.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row mt-5">
+                                <div class="col-md-4 mb-4 text-center">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <p class="display-4 fw-bold text-primary mb-1">20+</p>
+                                            <h5 class="fw-bold">Years in Service</h5>
+                                            <p class="text-muted mb-0">Proudly serving travelers across Pakistan</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-4 text-center">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <p class="display-4 fw-bold text-primary mb-1">120+</p>
+                                            <h5 class="fw-bold">Modern Coaches</h5>
+                                            <p class="text-muted mb-0">AC and Non-AC coaches in our fleet</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-4 text-center">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <p class="display-4 fw-bold text-primary mb-1">25+</p>
+                                            <h5 class="fw-bold">Intercity Routes</h5>
+                                            <p class="text-muted mb-0">Connecting major cities nationwide</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </t>
+        </template>
+
+        <record id="about_page" model="website.page">
+            <field name="url">/about-us</field>
+            <field name="name">About Us</field>
+            <field name="is_published">True</field>
+            <field name="view_id" ref="about_us"/>
+            <field name="track">True</field>
+            <field name="website_meta_description">Learn about Faisal Movers — safe, reliable and affordable intercity bus travel across Pakistan.</field>
+        </record>
+
+        <record id="menu_about_us" model="website.menu">
+            <field name="name">About Us</field>
+            <field name="url">/about-us</field>
+            <field name="page_id" ref="about_page"/>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence" type="int">20</field>
+        </record>
+
+        <!-- ============================================================ -->
+        <!-- CONTACT US                                                    -->
+        <!-- Inherits website.contactus and only updates the text content -->
+        <!-- of the contact details card. The built-in Odoo contact form  -->
+        <!-- is left fully intact.                                        -->
+        <!-- ============================================================ -->
+        <template id="website_bus_booking_contactus" inherit_id="website.contactus" name="Bus Booking Contact Us Content" priority="10">
+            <xpath expr="//h1[text()='Contact us']" position="replace">
+                <h1>Contact Faisal Movers</h1>
+            </xpath>
+            <xpath expr="//h5[text()='My Company']" position="replace">
+                <h5>Faisal Movers</h5>
+            </xpath>
+            <xpath expr="//span[text()='3575 Fake Buena Vista Avenue']" position="replace">
+                <span class="o_force_ltr">Faisal Movers Terminal, 6-A Ravi Road, Lahore, Pakistan</span>
+            </xpath>
+            <xpath expr="//span[text()='+1 555-555-5556']" position="replace">
+                <span class="o_force_ltr">+92 42 111-200-000</span>
+            </xpath>
+            <xpath expr="//span[text()='info@yourcompany.example.com']" position="replace">
+                <span>info@faisalmovers.example.com</span>
+            </xpath>
+        </template>
+
+    </data>
+</odoo>

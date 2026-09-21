@@ -9,7 +9,7 @@
                     <field name="name"/>
                     <field name="phone"/>
                     <field name="license_no"/>
-                    <field name="active"/>
+                    <field name="active" widget="boolean_toggle"/>
                 </list>
             </field>
         </record>
@@ -27,7 +27,7 @@
                             <field name="license_no"/>
                         </group>
                         <group>
-                            <field name="active"/>
+                            <field name="active" widget="boolean_toggle"/>
                         </group>
                     </sheet>
                 </form>

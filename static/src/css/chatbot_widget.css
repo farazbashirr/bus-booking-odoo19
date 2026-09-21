@@ -1,0 +1,95 @@
+/* Bus Booking offline FAQ chat widget (Phase 8).
+   Loaded via web.assets_frontend so it is present on every portal/website
+   page regardless of the page's own template. */
+
+#bbb-chat-widget {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 1050;
+}
+
+#bbb-chat-widget .bbb-chat-toggle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#bbb-chat-widget .bbb-chat-panel {
+    position: absolute;
+    right: 0;
+    bottom: 72px;
+    width: 340px;
+    max-width: calc(100vw - 40px);
+    height: 440px;
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+#bbb-chat-widget .bbb-chat-header {
+    background: #0d6efd;
+    color: #fff;
+    padding: 12px 16px;
+    font-weight: 600;
+}
+
+#bbb-chat-widget .bbb-chat-header small {
+    font-weight: 400;
+    opacity: 0.85;
+}
+
+#bbb-chat-widget .bbb-chat-messages {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: #f8f9fa;
+}
+
+#bbb-chat-widget .bbb-chat-msg {
+    display: flex;
+}
+
+#bbb-chat-widget .bbb-chat-msg-user {
+    justify-content: flex-end;
+}
+
+#bbb-chat-widget .bbb-chat-bubble {
+    max-width: 80%;
+    padding: 8px 12px;
+    border-radius: 12px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+#bbb-chat-widget .bbb-chat-msg-user .bbb-chat-bubble {
+    background: #0d6efd;
+    color: #fff;
+    border-bottom-right-radius: 2px;
+}
+
+#bbb-chat-widget .bbb-chat-msg-bot .bbb-chat-bubble {
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-bottom-left-radius: 2px;
+}
+
+#bbb-chat-widget .bbb-chat-input {
+    display: flex;
+    gap: 8px;
+    padding: 10px;
+    border-top: 1px solid #dee2e6;
+    background: #fff;
+}

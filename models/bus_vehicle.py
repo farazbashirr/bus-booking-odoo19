@@ -11,7 +11,11 @@ class BusVehicle(models.Model):
         ('ac', 'AC'),
         ('non_ac', 'Non-AC'),
     ], string='Vehicle Type', required=True)
-    total_seats = fields.Integer(string='Total Seats', required=True)
+    total_seats = fields.Integer(
+        string='Total Seats',
+        required=True,
+        help='Total seats on this vehicle. Drives the automatic seat generation.',
+    )
     active = fields.Boolean(string='Active', default=True)
 
     seat_ids = fields.One2many(

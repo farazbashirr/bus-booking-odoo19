@@ -11,7 +11,7 @@
                     <field name="destination"/>
                     <field name="distance_km"/>
                     <field name="base_fare"/>
-                    <field name="active"/>
+                    <field name="active" widget="boolean_toggle"/>
                 </list>
             </field>
         </record>
@@ -29,7 +29,7 @@
                             <field name="destination"/>
                             <field name="distance_km"/>
                             <field name="base_fare"/>
-                            <field name="active"/>
+                            <field name="active" widget="boolean_toggle"/>
                         </group>
                     </sheet>
                 </form>

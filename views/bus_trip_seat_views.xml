@@ -5,10 +5,15 @@
             <field name="name">bus.trip.seat.list</field>
             <field name="model">bus.trip.seat</field>
             <field name="arch" type="xml">
-                <list>
+                <list decoration-success="state == 'available'"
+                      decoration-info="state == 'booked'"
+                      decoration-warning="state == 'blocked'">
                     <field name="trip_id"/>
                     <field name="seat_number"/>
-                    <field name="state"/>
+                    <field name="state" widget="badge"
+                           decoration-success="state == 'available'"
+                           decoration-info="state == 'booked'"
+                           decoration-warning="state == 'blocked'"/>
                 </list>
             </field>
         </record>

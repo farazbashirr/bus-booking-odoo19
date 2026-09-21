@@ -28,4 +28,14 @@
             <field name="sequence">2</field>
         </record>
     </data>
+
+    <data>
+        <!-- Portal Record Rule: restrict portal users to their own bookings only -->
+        <record id="rule_bus_booking_portal" model="ir.rule">
+            <field name="name">Portal: Own Bookings Only</field>
+            <field name="model_id" ref="model_bus_booking"/>
+            <field name="domain_force">[('customer_id','=',user.partner_id.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+        </record>
+    </data>
 </odoo>

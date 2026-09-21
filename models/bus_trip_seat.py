@@ -29,6 +29,7 @@ class BusTripSeat(models.Model):
         string='Status',
         default='available',
         required=True,
+        help='Availability of this seat on the trip: available for booking, booked by a customer, or blocked.',
     )
 
     _unique_trip_seat = models.Constraint(

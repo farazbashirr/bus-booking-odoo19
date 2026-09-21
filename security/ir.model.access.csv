@@ -13,3 +13,7 @@ access_bus_trip_seat_agent,bus.trip.seat.agent,model_bus_trip_seat,group_bus_boo
 access_bus_trip_seat_manager,bus.trip.seat.manager,model_bus_trip_seat,group_bus_booking_manager,1,1,1,1
 access_bus_booking_agent,bus.booking.agent,model_bus_booking,group_bus_booking_agent,1,1,1,0
 access_bus_booking_manager,bus.booking.manager,model_bus_booking,group_bus_booking_manager,1,1,1,1
+access_bus_route_portal,bus.route.portal,model_bus_route,base.group_portal,1,0,0,0
+access_bus_trip_portal,bus.trip.portal,model_bus_trip,base.group_portal,1,0,0,0
+access_bus_trip_seat_portal,bus.trip.seat.portal,model_bus_trip_seat,base.group_portal,1,0,0,0
+access_bus_booking_portal,bus.booking.portal,model_bus_booking,base.group_portal,1,0,1,0

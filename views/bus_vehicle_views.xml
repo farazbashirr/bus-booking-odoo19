@@ -10,7 +10,7 @@
                     <field name="registration_no"/>
                     <field name="vehicle_type"/>
                     <field name="total_seats"/>
-                    <field name="active"/>
+                    <field name="active" widget="boolean_toggle"/>
                 </list>
             </field>
         </record>
@@ -29,12 +29,13 @@
                             <field name="total_seats"/>
                         </group>
                         <group>
-                            <field name="active"/>
+                            <field name="active" widget="boolean_toggle"/>
                         </group>
                         <group name="seat_buttons" string="Actions">
                             <button string="Generate Seats"
                                     name="action_generate_seats"
                                     type="object"
+                                    help="Creates seat records based on Total Seats. Only works if no seats exist yet."
                                     class="oe_highlight"/>
                         </group>
                         <notebook>

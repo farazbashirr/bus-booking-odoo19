@@ -1,0 +1,15 @@
+# Bus Booking System - Python runtime dependencies
+# ===================================================
+# The offline FAQ chatbot (Phase 8) uses scikit-learn to match user
+# questions against a fixed FAQ list with TF-IDF + cosine similarity.
+# It is a pure local computation - no API keys, no internet access.
+#
+# scikit-learn is NOT auto-installed by Odoo. It must be installed once
+# into the Odoo Python environment (the bundled interpreter) with:
+#
+#   pip install scikit-learn --break-system-packages
+#
+# (or the equivalent command for the user's actual OS / virtual env).
+# Without it, the chatbot simply returns a "temporarily unavailable"
+# message and the rest of the module keeps working normally.
+scikit-learn>=1.0

@@ -21,6 +21,12 @@ class BusTrip(models.Model):
         string='Vehicle',
         required=True,
     )
+    vehicle_type = fields.Selection(
+        related='vehicle_id.vehicle_type',
+        string='Vehicle Type',
+        store=True,
+        readonly=True,
+    )
     driver_id = fields.Many2one(
         'bus.driver',
         string='Driver',
@@ -52,6 +58,7 @@ class BusTrip(models.Model):
         string='Status',
         default='draft',
         required=True,
+        help='Workflow: Draft trips are confirmed to schedule and generate seats, then started and completed as the journey progresses. Cancelled trips can no longer be used for bookings.',
     )
     trip_seat_ids = fields.One2many(
         'bus.trip.seat',
@@ -62,21 +69,25 @@ class BusTrip(models.Model):
         string='Total Seats',
         related='vehicle_id.total_seats',
         readonly=True,
+        help='Total seats available on this trip, taken from the assigned vehicle.',
     )
     available_seats_count = fields.Integer(
         string='Available Seats',
         compute='_compute_available_seats_count',
+        help='Number of trip seats still in available state.',
     )
     booked_seats_count = fields.Integer(
         string='Booked Seats',
         compute='_compute_booked_seats_count',
         store=True,
+        help='Number of trip seats currently booked.',
     )
     occupancy_rate = fields.Float(
         string='Occupancy Rate',
         compute='_compute_occupancy_rate',
         store=True,
         aggregator='avg',
+        help='Percentage of booked seats relative to total seats.',
     )
 
     @api.depends('route_id', 'departure_datetime')
@@ -131,6 +142,13 @@ class BusTrip(models.Model):
                     })
                 self.env['bus.trip.seat'].create(seat_vals_list)
             trip.state = 'scheduled'
+        return {
+            'effect': {
+                'fadeout': 'slow',
+                'message': 'Trip Scheduled!',
+                'type': 'rainbow_man',
+            }
+        }
 
     def action_start_trip(self):
         for trip in self:

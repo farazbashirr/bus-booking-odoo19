@@ -26,6 +26,7 @@ class BusBooking(models.Model):
         'bus.trip.seat',
         string='Seats',
         required=True,
+        help='Only available seats for the selected trip can be chosen.',
     )
     seat_count = fields.Integer(
         string='Seat Count',
@@ -49,6 +50,7 @@ class BusBooking(models.Model):
         compute='_compute_total_fare',
         store=True,
         currency_field='currency_id',
+        help='Automatically calculated from fare per seat multiplied by seat count.',
     )
     payment_status = fields.Selection(
         [('unpaid', 'Unpaid'),
@@ -65,6 +67,7 @@ class BusBooking(models.Model):
         string='Status',
         default='draft',
         required=True,
+        help='Workflow: Draft bookings can be confirmed to reserve seats and create an invoice; confirmed bookings can be cancelled to release the seats.',
     )
     invoice_id = fields.Many2one(
         'account.move',
@@ -143,6 +146,13 @@ class BusBooking(models.Model):
             booking.booking_seat_ids.write({'state': 'booked'})
             booking.state = 'confirmed'
             booking._create_invoice()
+        return {
+            'effect': {
+                'fadeout': 'slow',
+                'message': 'Booking Confirmed!',
+                'type': 'rainbow_man',
+            }
+        }
 
     def action_cancel(self):
         for booking in self:
@@ -170,6 +180,7 @@ class BusBooking(models.Model):
             'partner_id': self.customer_id.id,
             'invoice_line_ids': invoice_lines,
         })
+        invoice.action_post()
         self.invoice_id = invoice
         return invoice
 

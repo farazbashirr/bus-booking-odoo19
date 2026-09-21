@@ -1,3 +1,7 @@
+# External Python dependency for the Phase 8 offline FAQ chatbot.
+# Install once into the Odoo Python environment with:
+#   pip install scikit-learn --break-system-packages
+# See requirements.txt at the module root. NOT auto-installed by Odoo.
 {
     'name': 'Bus Booking System',
     'summary': 'Intercity bus route, trip, and seat booking management',
@@ -22,11 +26,13 @@
     'installable': True,
     'auto_install': False,
     'license': 'LGPL-3',
-    'depends': ['base', 'mail', 'account'],
+    'depends': ['base', 'mail', 'account', 'website', 'portal', 'auth_signup'],
     'data': [
         'security/bus_booking_security.xml',
         'security/ir.model.access.csv',
         'data/bus_booking_sequence.xml',
+        'data/website_menu_data.xml',
+        'data/website_pages.xml',
         'views/bus_route_views.xml',
         'views/bus_vehicle_views.xml',
         'views/bus_seat_views.xml',
@@ -38,8 +44,16 @@
         'views/bus_booking_report_views.xml',
         'views/bus_trip_report_views.xml',
         'views/bus_booking_menus.xml',
+        'views/portal_booking_templates.xml',
+        'views/chatbot_widget_template.xml',
     ],
     'demo': [],
+    'assets': {
+        'web.assets_frontend': [
+            'bus_booking/static/src/css/chatbot_widget.css',
+            'bus_booking/static/src/js/chatbot.js',
+        ],
+    },
     'images': ['static/description/icon.png'],
     'website': False,
 }

@@ -12,6 +12,20 @@
             </field>
         </record>
 
+        <!-- Occupancy Pivot View -->
+        <record id="view_occupancy_pivot" model="ir.ui.view">
+            <field name="name">bus.trip.occupancy.pivot</field>
+            <field name="model">bus.trip</field>
+            <field name="arch" type="xml">
+                <pivot string="Occupancy Pivot">
+                    <field name="route_id" type="row"/>
+                    <field name="state" type="col"/>
+                    <field name="booked_seats_count" type="measure"/>
+                    <field name="occupancy_rate" type="measure"/>
+                </pivot>
+            </field>
+        </record>
+
         <!-- Occupancy Report Action -->
         <record id="action_occupancy_report" model="ir.actions.act_window">
             <field name="name">Occupancy Report</field>

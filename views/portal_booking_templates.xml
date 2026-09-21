@@ -1,0 +1,803 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================================ -->
+    <!-- Template 0: Logged-in user account dropdown (top-right navbar) -->
+    <!-- Adds "My Bookings" and "Profile" to the standard               -->
+    <!-- portal.user_dropdown, so logged-in customers can reach them    -->
+    <!-- from any website/portal page instead of typing the URL.        -->
+    <!-- ============================================================ -->
+    <template id="user_menu_bus_booking_links"
+              name="Portal User Dropdown: Bus Booking Links"
+              inherit_id="portal.user_dropdown">
+        <xpath expr="//*[@id='o_logout_divider']" position="before">
+            <a href="/my/bus-bookings" role="menuitem" class="dropdown-item ps-3">
+                <i class="fa fa-fw fa-ticket me-1 small text-primary-emphasis"/> My Bookings
+            </a>
+            <a href="/my/account" role="menuitem" class="dropdown-item ps-3">
+                <i class="fa fa-fw fa-user me-1 small text-primary-emphasis"/> Profile
+            </a>
+        </xpath>
+    </template>
+
+    <!-- ============================================================ -->
+    <!-- Template 1: Portal "My Home" — Add "My Bus Bookings" Entry    -->
+    <!-- ============================================================ -->
+    <template id="portal_my_home_bus_bookings"
+              name="Portal: My Home — Bus Bookings Entry"
+              inherit_id="portal.portal_my_home"
+              priority="60">
+
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">My Bus Bookings</t>
+                <t t-set="text">View and manage your bus bookings, invoices, and tickets.</t>
+                <t t-set="url" t-value="'/my/bus-bookings'"/>
+                <t t-set="config_card" t-value="True"/>
+                <t t-set="count"
+                   t-value="request.env['bus.booking'].sudo().search_count([('customer_id', '=', request.env.user.partner_id.id)])"/>
+            </t>
+        </xpath>
+    </template>
+
+    <!-- ============================================================ -->
+    <!-- Template 2: Trip Search / Listing Page                        -->
+    <!-- ============================================================ -->
+    <template id="portal_trip_search" name="Portal: Trip Search">
+        <t t-call="website.layout">
+
+            <t t-set="no_breadcrumbs" t-value="True"/>
+
+            <!-- Hero Banner -->
+            <div class="bg-primary bg-gradient text-white">
+                <div class="container py-5 text-center">
+                    <h1 class="display-5 fw-bold mb-2 mt-1">Book Your Bus Ticket</h1>
+                    <p class="lead mb-0 text-white-50">
+                        Explore available intercity trips, compare fares, and
+                        reserve your seats in just a few clicks.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Page Content -->
+            <div class="container my-5">
+                <h2 class="mb-4">Search Available Trips</h2>
+
+                <!-- Search Form -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <form method="get" action="/bus/trips" class="row g-3">
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">Origin</label>
+                                <select name="origin" class="form-select">
+                                    <option value="">All Origins</option>
+                                    <t t-foreach="origins" t-as="o">
+                                        <option t-att-value="o"
+                                                t-att-selected="o == search_origin">
+                                            <t t-out="o"/>
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">Destination</label>
+                                <select name="destination" class="form-select">
+                                    <option value="">All Destinations</option>
+                                    <t t-foreach="destinations" t-as="d">
+                                        <option t-att-value="d"
+                                                t-att-selected="d == search_destination">
+                                            <t t-out="d"/>
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">Date</label>
+                                <input type="date" name="date"
+                                       t-att-value="search_date"
+                                       class="form-control"/>
+                            </div>
+                            <div class="col-md-3 d-flex align-items-end">
+                                <button type="submit"
+                                        class="btn btn-primary w-100">
+                                    Search
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Results -->
+                <t t-if="trips">
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                        <t t-foreach="trips" t-as="trip">
+                            <div class="col">
+                                <div class="card h-100 shadow-sm">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <h5 class="card-title mb-0">
+                                                <t t-out="trip.route_id.origin"/>
+                                                <i class="fa fa-long-arrow-right mx-1"/>
+                                                <t t-out="trip.route_id.destination"/>
+                                            </h5>
+                                            <t t-if="trip.vehicle_type == 'ac'">
+                                                <span class="badge bg-info">AC</span>
+                                            </t>
+                                            <t t-else="">
+                                                <span class="badge bg-secondary">Non-AC</span>
+                                            </t>
+                                        </div>
+                                        <ul class="list-unstyled mb-3">
+                                            <li class="mb-2">
+                                                <i class="fa fa-calendar-o me-2 text-muted"/>
+                                                <strong>Departure:</strong>
+                                                <t t-out="trip.departure_datetime"
+                                                   t-options="{'widget': 'datetime'}"/>
+                                            </li>
+                                            <li class="mb-2 d-flex justify-content-between">
+                                                <span class="text-muted">Fare</span>
+                                                <span class="fw-bold fs-5 text-primary">
+                                                    <t t-out="trip.fare"
+                                                       t-options="{'widget': 'monetary',
+                                                                   'display_currency': trip.currency_id}"/>
+                                                </span>
+                                            </li>
+                                            <li>
+                                                <t t-if="trip.available_seats_count > 0">
+                                                    <span class="badge bg-success">
+                                                        <i class="fa fa-user me-1"/>
+                                                        <t t-out="trip.available_seats_count"/>
+                                                        seats available
+                                                    </span>
+                                                </t>
+                                                <t t-else="">
+                                                    <span class="badge bg-danger">
+                                                        <i class="fa fa-ban me-1"/>
+                                                        Trip Full
+                                                    </span>
+                                                </t>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="card-footer bg-white border-top-0 pb-4 pt-0">
+                                        <a t-attf-href="/bus/trip/{{ trip.id }}"
+                                           class="btn btn-primary w-100">
+                                            <i class="fa fa-ticket me-1"/>
+                                            Select Seats
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+                <t t-else="">
+                    <div class="alert alert-info">
+                        <i class="fa fa-info-circle me-1"/>
+                        No upcoming trips found matching your criteria.
+                        Try broadening your search.
+                    </div>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <!-- ============================================================ -->
+    <!-- Template 3: Trip Detail + Seat Selection Page                 -->
+    <!-- ============================================================ -->
+    <template id="portal_trip_detail" name="Portal: Trip Detail">
+        <t t-call="website.layout">
+
+            <t t-set="no_breadcrumbs" t-value="True"/>
+
+            <!-- Hero Banner -->
+            <div class="bg-primary bg-gradient text-white">
+                <div class="container py-5 text-center">
+                    <h1 class="display-5 fw-bold mb-2 mt-1">
+                        <t t-out="trip.route_id.origin"/>
+                        <i class="fa fa-long-arrow-right mx-2"/>
+                        <t t-out="trip.route_id.destination"/>
+                    </h1>
+                    <p class="lead mb-0 text-white-50">
+                        <t t-if="trip.vehicle_type == 'ac'">
+                            <span class="badge bg-info me-2">AC</span>
+                        </t>
+                        <t t-else="">
+                            <span class="badge bg-secondary me-2">Non-AC</span>
+                        </t>
+                        <i class="fa fa-calendar-o me-1"/>
+                        <t t-out="trip.departure_datetime"
+                           t-options="{'widget': 'datetime'}"/>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Page Content -->
+            <div class="container my-5">
+                <!-- Back link -->
+                <a href="/bus/trips" class="text-decoration-none mb-3 d-inline-block">
+                    <i class="fa fa-arrow-left me-1"/> Back to Trip Search
+                </a>
+
+                <!-- Trip Info Card -->
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">
+                            <t t-out="trip.route_id.origin"/>
+                            <i class="fa fa-long-arrow-right mx-2"/>
+                            <t t-out="trip.route_id.destination"/>
+                        </h4>
+                        <t t-if="trip.vehicle_type == 'ac'">
+                            <span class="badge bg-info fs-6">AC</span>
+                        </t>
+                        <t t-else="">
+                            <span class="badge bg-secondary fs-6">Non-AC</span>
+                        </t>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <strong>Departure:</strong>
+                                <p class="mb-0">
+                                    <t t-out="trip.departure_datetime"
+                                       t-options="{'widget': 'datetime'}"/>
+                                </p>
+                            </div>
+                            <div class="col-md-4">
+                                <strong>Fare per Seat:</strong>
+                                <p class="mb-0 fs-5 fw-bold text-primary">
+                                    <t t-out="trip.fare"
+                                       t-options="{'widget': 'monetary',
+                                                  'display_currency': trip.currency_id}"/>
+                                </p>
+                            </div>
+                            <div class="col-md-4">
+                                <strong>Available Seats:</strong>
+                                <p class="mb-0">
+                                    <t t-out="trip.available_seats_count"/>
+                                    / <t t-out="trip.total_seats"/>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Error Message -->
+                <t t-if="error">
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        <i class="fa fa-exclamation-triangle me-1"/>
+                        <t t-out="error"/>
+                        <button type="button" class="btn-close"
+                                data-bs-dismiss="alert"/>
+                    </div>
+                </t>
+
+                <!-- Seat Map Section -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Select Your Seats</h5>
+                    </div>
+                    <div class="card-body">
+                        <style>
+                            .seat-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+                            .seat-btn {
+                                display: flex; flex-direction: column;
+                                align-items: center; justify-content: center;
+                                width: 72px; height: 72px; border-radius: 8px;
+                                cursor: pointer; transition: all 0.15s ease;
+                                border: 2px solid transparent; font-weight: 600;
+                                user-select: none; position: relative;
+                            }
+                            .seat-btn .seat-number { font-size: 1.1rem; line-height: 1; }
+                            .seat-btn .seat-type-badge {
+                                font-size: 0.65rem; opacity: 0.7; margin-top: 2px;
+                            }
+                            .seat-available {
+                                background: #d1e7dd; border-color: #198754; color: #0f5132;
+                            }
+                            .seat-available:hover {
+                                background: #198754; color: #fff;
+                                transform: translateY(-2px); box-shadow: 0 2px 8px rgba(25,135,84,0.3);
+                            }
+                            .seat-available:has(input:checked) {
+                                background: #0d6efd; border-color: #0d6efd; color: #fff;
+                                transform: translateY(-2px); box-shadow: 0 2px 8px rgba(13,110,253,0.3);
+                            }
+                            .seat-booked {
+                                background: #e2e3e5; border-color: #6c757d; color: #41464b; opacity: 0.6;
+                            }
+                            .seat-blocked {
+                                background: #f8d7da; border-color: #dc3545; color: #842029; opacity: 0.6;
+                            }
+                            .disabled { cursor: not-allowed; pointer-events: none; }
+                        </style>
+                        <!-- Not Logged In -->
+                        <t t-if="not is_logged_in">
+                            <div class="text-center py-4">
+                                <i class="fa fa-user-lock fa-3x text-muted mb-3"/>
+                                <h5>Please log in to book seats</h5>
+                                <p class="text-muted">
+                                    You need an account to reserve seats on this trip.
+                                </p>
+                                <a t-attf-href="/web/login?redirect=/bus/trip/{{ trip.id }}"
+                                   class="btn btn-primary btn-lg">
+                                    <i class="fa fa-sign-in me-1"/> Login to Book
+                                </a>
+                            </div>
+                        </t>
+
+                        <!-- Logged In: Seat Selection -->
+                        <t t-else="">
+                            <!-- Legend -->
+                            <div class="d-flex gap-3 mb-3 flex-wrap">
+                                <span>
+                                    <span class="badge bg-success me-1">&#160;</span>
+                                    Available
+                                </span>
+                                <span>
+                                    <span class="badge bg-secondary me-1">&#160;</span>
+                                    Booked
+                                </span>
+                                <span>
+                                    <span class="badge bg-danger me-1">&#160;</span>
+                                    Blocked
+                                </span>
+                                <span>
+                                    <span class="badge bg-primary me-1">&#160;</span>
+                                    Selected
+                                </span>
+                            </div>
+
+                            <form method="post"
+                                  t-attf-action="/bus/trip/{{ trip.id }}/book">
+                                <input type="hidden" name="csrf_token"
+                                       t-att-value="request.csrf_token()"/>
+
+                                <!-- Seat Grid -->
+                                <div class="seat-grid mb-4">
+                                    <t t-foreach="seats" t-as="seat">
+                                        <t t-if="seat.state == 'available'">
+                                            <label class="seat-btn seat-available"
+                                                   t-attf-title="Seat {{ seat.seat_number }} — Available">
+                                                <input type="checkbox"
+                                                       name="selected_seats"
+                                                       t-att-value="seat.id"
+                                                       class="d-none"/>
+                                                <span class="seat-number">
+                                                    <t t-out="seat.seat_number"/>
+                                                </span>
+                                                <span class="seat-type-badge">
+                                                    <t t-if="seat.seat_id.seat_type == 'window'">
+                                                        <i class="fa fa-square-o"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <i class="fa fa-bars"/>
+                                                    </t>
+                                                </span>
+                                            </label>
+                                        </t>
+                                        <t t-elif="seat.state == 'booked'">
+                                            <span class="seat-btn seat-booked disabled"
+                                                  t-attf-title="Seat {{ seat.seat_number }} — Booked">
+                                                <span class="seat-number">
+                                                    <t t-out="seat.seat_number"/>
+                                                </span>
+                                                <span class="seat-type-badge">
+                                                    <i class="fa fa-lock"/>
+                                                </span>
+                                            </span>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="seat-btn seat-blocked disabled"
+                                                  t-attf-title="Seat {{ seat.seat_number }} — Blocked">
+                                                <span class="seat-number">
+                                                    <t t-out="seat.seat_number"/>
+                                                </span>
+                                                <span class="seat-type-badge">
+                                                    <i class="fa fa-ban"/>
+                                                </span>
+                                            </span>
+                                        </t>
+                                    </t>
+                                </div>
+
+                                <!-- Submit -->
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">
+                                        Click available seats to select them,
+                                        then click Book.
+                                    </small>
+                                    <button type="submit"
+                                            class="btn btn-primary btn-lg"
+                                            id="btn-book-seats">
+                                        <i class="fa fa-ticket me-1"/>
+                                        Book Selected Seats
+                                    </button>
+                                </div>
+                            </form>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- ============================================================ -->
+    <!-- Template 4: "My Bus Bookings" Listing                         -->
+    <!-- ============================================================ -->
+    <template id="portal_my_bus_bookings" name="Portal: My Bus Bookings">
+        <t t-call="portal.portal_layout">
+
+            <div class="container mt-4 mb-5">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="mb-0">My Bus Bookings</h2>
+                    <a href="/my/account" class="btn btn-outline-secondary">
+                        <i class="fa fa-id-card-o me-1"/>
+                        My Account
+                    </a>
+                </div>
+
+                <t t-if="bookings">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Booking Ref</th>
+                                    <th>Route</th>
+                                    <th>Departure</th>
+                                    <th class="text-center">Seats</th>
+                                    <th class="text-end">Total Fare</th>
+                                    <th class="text-center">Status</th>
+                                    <th class="text-center">Payment</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="bookings" t-as="b">
+                                    <tr>
+                                        <td class="fw-bold">
+                                            <t t-out="b.name"/>
+                                        </td>
+                                        <td>
+                                            <t t-if="b.trip_id">
+                                                <t t-out="b.trip_id.route_id.origin"/>
+                                                <i class="fa fa-long-arrow-right mx-1"/>
+                                                <t t-out="b.trip_id.route_id.destination"/>
+                                            </t>
+                                        </td>
+                                        <td>
+                                            <t t-if="b.trip_id">
+                                                <t t-out="b.trip_id.departure_datetime"
+                                                   t-options="{'widget': 'datetime'}"/>
+                                            </t>
+                                        </td>
+                                        <td class="text-center">
+                                            <t t-out="b.seat_count"/>
+                                        </td>
+                                        <td class="text-end">
+                                            <t t-out="b.total_fare"
+                                               t-options="{'widget': 'monetary',
+                                                          'display_currency': b.currency_id}"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <t t-if="b.state == 'confirmed'">
+                                                <span class="badge bg-success">Confirmed</span>
+                                            </t>
+                                            <t t-elif="b.state == 'draft'">
+                                                <span class="badge bg-warning text-dark">Draft</span>
+                                            </t>
+                                            <t t-else="">
+                                                <span class="badge bg-danger">Cancelled</span>
+                                            </t>
+                                        </td>
+                                        <td class="text-center">
+                                            <t t-if="b.payment_status == 'paid'">
+                                                <span class="badge bg-success">Paid</span>
+                                            </t>
+                                            <t t-elif="b.payment_status == 'refunded'">
+                                                <span class="badge bg-info">Refunded</span>
+                                            </t>
+                                            <t t-else="">
+                                                <span class="badge bg-warning text-dark">Unpaid</span>
+                                            </t>
+                                        </td>
+                                        <td class="text-center">
+                                            <a t-attf-href="/my/bus-bookings/{{ b.id }}"
+                                               class="btn btn-sm btn-outline-primary">
+                                                View
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+                <t t-else="">
+                    <div class="alert alert-info">
+                        <i class="fa fa-info-circle me-1"/>
+                        You have no bus bookings yet.
+                        <a href="/bus/trips" class="alert-link">
+                            Browse available trips
+                        </a>.
+                    </div>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <!-- ============================================================ -->
+    <!-- Template 5: Booking Detail + Confirmation Page                -->
+    <!-- ============================================================ -->
+    <template id="portal_booking_detail" name="Portal: Booking Detail">
+        <t t-call="portal.portal_layout">
+
+            <div class="container mt-4 mb-5">
+                <!-- Back link -->
+                <a href="/my/bus-bookings"
+                   class="text-decoration-none mb-3 d-inline-block">
+                    <i class="fa fa-arrow-left me-1"/> Back to My Bookings
+                </a>
+
+                <!-- Success Banner -->
+                <t t-if="booking.state == 'confirmed'">
+                    <div class="alert alert-success d-flex align-items-center mb-4">
+                        <i class="fa fa-check-circle fa-2x me-3"/>
+                        <div>
+                            <h5 class="alert-heading mb-1">Booking Confirmed!</h5>
+                            <p class="mb-0">
+                                Booking Reference: <strong><t t-out="booking.name"/></strong>
+                            </p>
+                            <t t-if="booking.payment_status == 'unpaid'">
+                                <p class="mb-0 mt-1">
+                                    <i class="fa fa-info-circle me-1"/>
+                                    Please pay at the counter or on boarding.
+                                </p>
+                            </t>
+                        </div>
+                    </div>
+                </t>
+
+                <!-- Cancellation Success Banner -->
+                <t t-if="success">
+                    <div class="alert alert-success d-flex align-items-center mb-4">
+                        <i class="fa fa-check-circle fa-2x me-3"/>
+                        <div>
+                            <h5 class="alert-heading mb-1">Booking Cancelled</h5>
+                            <p class="mb-0">
+                                Your booking <strong><t t-out="booking.name"/></strong>
+                                has been cancelled and the seat(s) have been released.
+                            </p>
+                        </div>
+                    </div>
+                </t>
+
+                <!-- Cancellation/Error Banner -->
+                <t t-if="error">
+                    <div class="alert alert-danger alert-dismissible fade show mb-4">
+                        <i class="fa fa-exclamation-triangle me-1"/>
+                        <t t-out="error"/>
+                        <button type="button" class="btn-close"
+                                data-bs-dismiss="alert"/>
+                    </div>
+                </t>
+
+                <div class="row">
+                    <!-- Booking Info -->
+                    <div class="col-lg-8">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">Booking Details</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-sm-4 fw-bold">Booking Reference:</div>
+                                    <div class="col-sm-8">
+                                        <t t-out="booking.name"/>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-sm-4 fw-bold">Status:</div>
+                                    <div class="col-sm-8">
+                                        <t t-if="booking.state == 'confirmed'">
+                                            <span class="badge bg-success">Confirmed</span>
+                                        </t>
+                                        <t t-elif="booking.state == 'draft'">
+                                            <span class="badge bg-warning text-dark">Draft</span>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="badge bg-danger">Cancelled</span>
+                                        </t>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-sm-4 fw-bold">Payment Status:</div>
+                                    <div class="col-sm-8">
+                                        <t t-if="booking.payment_status == 'paid'">
+                                            <span class="badge bg-success">Paid</span>
+                                        </t>
+                                        <t t-elif="booking.payment_status == 'refunded'">
+                                            <span class="badge bg-info">Refunded</span>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="badge bg-warning text-dark">Unpaid</span>
+                                        </t>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-sm-4 fw-bold">Booking Date:</div>
+                                    <div class="col-sm-8">
+                                        <t t-out="booking.booking_date"
+                                           t-options="{'widget': 'datetime'}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Trip Info -->
+                        <t t-if="booking.trip_id">
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Trip Information</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row mb-3">
+                                        <div class="col-sm-4 fw-bold">Route:</div>
+                                        <div class="col-sm-8">
+                                            <t t-out="booking.trip_id.route_id.origin"/>
+                                            <i class="fa fa-long-arrow-right mx-2"/>
+                                            <t t-out="booking.trip_id.route_id.destination"/>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-sm-4 fw-bold">Departure:</div>
+                                        <div class="col-sm-8">
+                                            <t t-out="booking.trip_id.departure_datetime"
+                                               t-options="{'widget': 'datetime'}"/>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-sm-4 fw-bold">Vehicle Type:</div>
+                                        <div class="col-sm-8">
+                                            <t t-if="booking.trip_id.vehicle_type == 'ac'">
+                                                <span class="badge bg-info">AC</span>
+                                            </t>
+                                            <t t-else="">
+                                                <span class="badge bg-secondary">Non-AC</span>
+                                            </t>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+
+                        <!-- Seats -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">Booked Seats</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex flex-wrap gap-2">
+                                    <t t-foreach="booking.booking_seat_ids" t-as="seat">
+                                        <span class="badge bg-success fs-6 py-2 px-3">
+                                            <i class="fa fa-check-square me-1"/>
+                                            Seat <t t-out="seat.seat_number"/>
+                                        </span>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar: Fare Summary + Actions -->
+                    <div class="col-lg-4">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">Fare Summary</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Fare per seat:</span>
+                                    <span>
+                                        <t t-out="booking.fare_per_seat"
+                                           t-options="{'widget': 'monetary',
+                                                      'display_currency': booking.currency_id}"/>
+                                    </span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Number of seats:</span>
+                                    <span><t t-out="booking.seat_count"/></span>
+                                </div>
+                                <hr/>
+                                <div class="d-flex justify-content-between fw-bold fs-5">
+                                    <span>Total:</span>
+                                    <span class="text-primary">
+                                        <t t-out="booking.total_fare"
+                                           t-options="{'widget': 'monetary',
+                                                      'display_currency': booking.currency_id}"/>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">Actions</h5>
+                            </div>
+                            <div class="card-body d-grid gap-2">
+                                <!-- Invoice Link -->
+                                <t t-if="invoice_url">
+                                    <a t-att-href="invoice_url"
+                                       class="btn btn-outline-secondary">
+                                        <i class="fa fa-file-text-o me-1"/>
+                                        View Invoice
+                                    </a>
+                                </t>
+
+                                <!-- Ticket Download -->
+                                <t t-if="booking.state == 'confirmed'">
+                                    <a t-att-href="ticket_url"
+                                       class="btn btn-outline-primary"
+                                       target="_blank">
+                                        <i class="fa fa-download me-1"/>
+                                        Download Ticket (PDF)
+                                    </a>
+                                </t>
+
+                                <!-- Print Ticket -->
+                                <t t-if="booking.state == 'confirmed'">
+                                    <a t-att-href="ticket_url"
+                                       class="btn btn-outline-secondary"
+                                       target="_blank">
+                                        <i class="fa fa-print me-1"/>
+                                        Print Ticket
+                                    </a>
+                                </t>
+
+                                <!-- Cancel Booking (only while confirmed) -->
+                                <t t-if="booking.state == 'confirmed'">
+                                    <form method="post"
+                                          t-attf-action="/my/bus-bookings/{{ booking.id }}/cancel"
+                                          onsubmit="return confirm('Are you sure you want to cancel this booking? Your seat will be released.');">
+                                        <input type="hidden" name="csrf_token"
+                                               t-att-value="request.csrf_token()"/>
+                                        <button type="submit"
+                                                class="btn btn-outline-danger w-100">
+                                            <i class="fa fa-close me-1"/>
+                                            Cancel Booking
+                                        </button>
+                                    </form>
+                                </t>
+
+                                <!-- Edit Profile -->
+                                <a href="/my/account"
+                                   class="btn btn-outline-secondary">
+                                    <i class="fa fa-id-card-o me-1"/>
+                                    Edit Profile
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Payment Notice -->
+                        <t t-if="booking.payment_status == 'unpaid'">
+                            <div class="alert alert-warning">
+                                <h6 class="alert-heading">
+                                    <i class="fa fa-exclamation-triangle me-1"/>
+                                    Payment Pending
+                                </h6>
+                                <p class="mb-0 small">
+                                    Please pay at the counter or on boarding.
+                                    Bring your booking reference
+                                    (<strong><t t-out="booking.name"/></strong>)
+                                    when you visit.
+                                </p>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+</odoo>

@@ -34,12 +34,36 @@
             <field name="context">{'search_default_group_by_route_name': 1}</field>
         </record>
 
+        <!-- Today's Bookings List View -->
+        <record id="bus_booking_today_list" model="ir.ui.view">
+            <field name="name">bus.booking.today.list</field>
+            <field name="model">bus.booking</field>
+            <field name="arch" type="xml">
+                <list decoration-muted="state == 'draft'"
+                      decoration-success="state == 'confirmed'"
+                      decoration-danger="state == 'cancelled'">
+                    <field name="name"/>
+                    <field name="customer_id"/>
+                    <field name="route_name"/>
+                    <field name="trip_date"/>
+                    <field name="seat_count"/>
+                    <field name="total_fare"/>
+                    <field name="payment_status"/>
+                    <field name="state" widget="badge"
+                           decoration-muted="state == 'draft'"
+                           decoration-success="state == 'confirmed'"
+                           decoration-danger="state == 'cancelled'"/>
+                </list>
+            </field>
+        </record>
+
         <!-- Today's Bookings Action -->
         <record id="action_today_bookings" model="ir.actions.act_window">
             <field name="name">Today's Bookings</field>
             <field name="res_model">bus.booking</field>
             <field name="view_mode">list,form</field>
-            <field name="domain">[('trip_date','&gt;=',context_today().strftime('%%Y-%%m-%%d 00:00:00')),('trip_date','&lt;',context_today().strftime('%%Y-%%m-%%d') + ' 1 day')]</field>
+            <field name="view_id" ref="bus_booking_today_list"/>
+            <field name="domain">[('trip_date','&gt;=','%s 00:00:00' % context_today()),('trip_date','&lt;','%s 23:59:59' % context_today())]</field>
         </record>
     </data>
 </odoo>
